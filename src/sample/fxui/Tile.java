@@ -22,17 +22,6 @@ public class Tile extends StackPane {
 
         Pane root = new Pane();
         root.setPrefSize(1200, 750);
-        Button button1 = new Button();
-        button1.setTranslateX(1000);
-        button1.setTranslateY(0);
-        //button1.setMinWidth(120);
-        button1.setText("Just a button");
-        root.getChildren().add(button1);
-
-        button1.setOnMouseClicked(event -> {
-            //tilesCount = 10;
-            button1.setText("Another");
-        });
 
         for (int i = 0; i < tilesCount; i++) {
             for (int j = 0; j < tilesCount; j++) {
