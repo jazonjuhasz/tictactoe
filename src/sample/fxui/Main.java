@@ -3,12 +3,13 @@ package sample.fxui;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.layout.StackPane;
-import javafx.geometry.Pos;
+import static sample.fxui.Tile.createContent;
 
 
 public class Main extends Application {
@@ -190,7 +191,7 @@ public class Main extends Application {
             Pane base = new Pane();
             base.setPrefSize(1200, 750);
 
-            base.getChildren().addAll(tile3.createContent(three), button1);
+            base.getChildren().addAll(createContent(three), button1);
 
             tilesPane.getChildren().add(base);
 
@@ -210,7 +211,7 @@ public class Main extends Application {
             Pane midMapPane = new Pane();
             midMapPane.setPrefSize(1200, 750);
 
-            midMapPane.getChildren().addAll(tile10.createContent(ten), button2);
+            midMapPane.getChildren().addAll(createContent(ten), button2);
 
             midMapStackPane.getChildren().add(midMapPane);
 
@@ -230,7 +231,7 @@ public class Main extends Application {
             Pane largeMapPane = new Pane();
             largeMapPane.setPrefSize(1200, 750);
 
-            largeMapPane.getChildren().addAll(tile15.createContent(fifteen), button3);
+            largeMapPane.getChildren().addAll(createContent(fifteen), button3);
 
             largeMapStackPane.getChildren().add(largeMapPane);
 
@@ -240,8 +241,10 @@ public class Main extends Application {
         // let's roll!
         window.setTitle("Tic-Tac-Toe");
         window.setResizable(false);
+        window.getIcons().add(new Image("tttico.png"));
         window.setScene(menuScene);
         window.show();
+
     }
 
     public static void main(String[] args) {

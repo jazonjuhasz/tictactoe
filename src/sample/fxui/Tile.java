@@ -2,7 +2,6 @@ package sample.fxui;
 
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -11,8 +10,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.util.Arrays;
+
 public class Tile extends StackPane {
-    Tile[][] board;
+    static String[][] board3 = new String[3][3];
+    static String[][] board10 = new String[10][10];
+    static String[][] board15 = new String[15][15];
+    int tilesCount;
     int i;
     int j;
 
@@ -20,9 +24,8 @@ public class Tile extends StackPane {
     private Text text = new Text();
     boolean writeAble = text.getText().isEmpty();
 
-    public Parent createContent(int tilesCount) {
+    public static Parent createContent(int tilesCount) {
         double boardSize = 750.0 / tilesCount;
-        board = new Tile[tilesCount][tilesCount];
 
         Pane root = new Pane();
         root.setPrefSize(1200, 750);
@@ -33,18 +36,17 @@ public class Tile extends StackPane {
                 tile.setTranslateX(j * boardSize);
                 tile.setTranslateY(i * boardSize);
                 root.getChildren().add(tile);
-                // add this tile to Tile array to check winner later
-                this.i = i;
-                this.j = j;
-                board[j][i] = tile;
+                // add some kind of id
+                tile.i = i;
+                tile.j = j;
             }
         }
-
         return root;
     }
 
     public Tile(int tilesCount) {
         double boardSize = 750.0 / tilesCount;
+        this.tilesCount = tilesCount;
         Rectangle border = new Rectangle(boardSize, boardSize);
         border.setFill(Color.WHITESMOKE);
         border.setStroke(Color.BLACK);
@@ -73,11 +75,25 @@ public class Tile extends StackPane {
                     writeAble = false;
                     draw();
                     changePlayer();
+                    // update board w id
+                    switch (tilesCount) {
+                        case 3:
+                            board3[i][j] = this.text.getText();
+                            break;
+                        case 10:
+                            board10[i][j] = this.text.getText();
+                            break;
+                        case 15:
+                            board15[i][j] = this.text.getText();
+                            break;
+                    }
+                    System.out.println(Arrays.deepToString(board3));
                 }
+
             }
 
         });
-        Glow glow = new Glow();
+        // Glow glow = new Glow();
 
         setOnMouseEntered(event -> {
             //glow.setLevel(0.9);
@@ -104,5 +120,4 @@ public class Tile extends StackPane {
             currentPlayerSign = "X";
         }
     }
-
 }
