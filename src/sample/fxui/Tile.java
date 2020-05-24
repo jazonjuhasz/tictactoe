@@ -2,7 +2,6 @@ package sample.fxui;
 
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
@@ -13,12 +12,17 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class Tile extends StackPane {
-    static String currentPlayerSing = "X";
+    Tile[][] board;
+    int i;
+    int j;
+
+    static String currentPlayerSign = "X";
     private Text text = new Text();
     boolean writeAble = text.getText().isEmpty();
 
-    public static Parent createContent(int tilesCount) {
+    public Parent createContent(int tilesCount) {
         double boardSize = 750.0 / tilesCount;
+        board = new Tile[tilesCount][tilesCount];
 
         Pane root = new Pane();
         root.setPrefSize(1200, 750);
@@ -29,6 +33,10 @@ public class Tile extends StackPane {
                 tile.setTranslateX(j * boardSize);
                 tile.setTranslateY(i * boardSize);
                 root.getChildren().add(tile);
+                // add this tile to Tile array to check winner later
+                this.i = i;
+                this.j = j;
+                board[j][i] = tile;
             }
         }
 
@@ -70,12 +78,15 @@ public class Tile extends StackPane {
                     changePlayer();
                 }
             }
+
         });
         Glow glow = new Glow();
+
         setOnMouseEntered(event -> {
             glow.setLevel(0.9);
             setEffect(glow);
         });
+
         setOnMouseExited(event -> {
             glow.setLevel(0);
             setEffect(glow);
@@ -84,14 +95,14 @@ public class Tile extends StackPane {
 
 
     private void draw() {
-        text.setText(currentPlayerSing);
+        text.setText(currentPlayerSign);
     }
 
     private void changePlayer() {
-        if (currentPlayerSing == "X") {
-            currentPlayerSing = "O";
+        if (currentPlayerSign == "X") {
+            currentPlayerSign = "O";
         } else {
-            currentPlayerSing = "X";
+            currentPlayerSign = "X";
         }
     }
 
