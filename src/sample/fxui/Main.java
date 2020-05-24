@@ -12,23 +12,22 @@ public class Main extends Application {
     Stage window;
     Scene menuScene,
             singleGame3,
-            singleGame5,
             singleGame10,
             singleGame15;
 
     int three = 3;
-    int five = 5;
     int ten = 10;
     int fifteen = 15;
 
     Tile tile3 = new Tile(three);
-    Tile tile5 = new Tile(five);
     Tile tile10 = new Tile(ten);
     Tile tile15 = new Tile(fifteen);
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
+        int menuBtnSizeX = 140;
+        int menuBtnSizeY = 60;
 
         //main menu
         {
@@ -37,46 +36,34 @@ public class Main extends Application {
             Pane menuBase = new Pane();
             menuBase.setPrefSize(600, 600);
 
-            Buttons newGameButton = new Buttons(140, 60);
-            newGameButton.createButton(newGameButton);
-            newGameButton.text.setText("3x3");
-            newGameButton.setTranslateX(120);
-            newGameButton.setTranslateY(80);
+            Buttons smallGameButton = new Buttons(menuBtnSizeX, menuBtnSizeY);
+            smallGameButton.createButton(smallGameButton);
+            smallGameButton.text.setText("small");
+            smallGameButton.setTranslateX(120);
+            smallGameButton.setTranslateY(80);
 
-            Buttons multiPlayerButton = new Buttons(140, 60);
-            multiPlayerButton.createButton(multiPlayerButton);
-            multiPlayerButton.text.setText("5x5");
-            multiPlayerButton.setTranslateX(120);
-            multiPlayerButton.setTranslateY(180);
+            Buttons midGameButton = new Buttons(menuBtnSizeX, menuBtnSizeY);
+            midGameButton.createButton(midGameButton);
+            midGameButton.text.setText("medium");
+            midGameButton.setTranslateX(120);
+            midGameButton.setTranslateY(180);
 
-            menuBase.getChildren().addAll(newGameButton, multiPlayerButton);
+            Buttons largeGameButton = new Buttons(menuBtnSizeX, menuBtnSizeY);
+            largeGameButton.createButton(midGameButton);
+            largeGameButton.text.setText("large");
+            largeGameButton.setTranslateX(120);
+            largeGameButton.setTranslateY(280);
+
+            menuBase.getChildren().addAll(smallGameButton, midGameButton, largeGameButton);
             menu.getChildren().add(menuBase);
             menuScene = new Scene(menu);
 
-            newGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
+            smallGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> window.setScene(singleGame3));
-            multiPlayerButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                    (event) -> window.setScene(singleGame5));
-        }
-
-        //size: TEN
-        {
-            StackPane tilesPane2 = new StackPane();
-            Button button2 = new Button("Back to menu");
-            button2.setTranslateX(1000);
-            button2.setTranslateY(100);
-            button2.setOnAction(event -> {
-                window.setScene(menuScene);
-            });
-
-            Pane base2 = new Pane();
-            base2.setPrefSize(1200, 750);
-
-            base2.getChildren().addAll(tile5.createContent(five), button2);
-
-            tilesPane2.getChildren().add(base2);
-
-            singleGame5 = new Scene(tilesPane2);
+            midGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> window.setScene(singleGame10));
+            largeGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> window.setScene(singleGame15));
         }
 
         //size: THREE
@@ -98,6 +85,48 @@ public class Main extends Application {
 
             singleGame3 = new Scene(tilesPane);
         }
+
+        //size: TEN
+        {
+            StackPane midMapStackPane = new StackPane();
+            Button button2 = new Button("Back to menu");
+            button2.setTranslateX(1000);
+            button2.setTranslateY(100);
+            button2.setOnAction(event -> {
+                window.setScene(menuScene);
+            });
+
+            Pane midMapPane = new Pane();
+            midMapPane.setPrefSize(1200, 750);
+
+            midMapPane.getChildren().addAll(tile10.createContent(ten), button2);
+
+            midMapStackPane.getChildren().add(midMapPane);
+
+            singleGame10 = new Scene(midMapStackPane);
+        }
+
+        //size: FIFTEEN
+        {
+            StackPane largeMapStackPane = new StackPane();
+            Button button3 = new Button("Back to menu");
+            button3.setTranslateX(1000);
+            button3.setTranslateY(100);
+            button3.setOnAction(event -> {
+                window.setScene(menuScene);
+            });
+
+            Pane largeMapPane = new Pane();
+            largeMapPane.setPrefSize(1200, 750);
+
+            largeMapPane.getChildren().addAll(tile15.createContent(fifteen), button3);
+
+            largeMapStackPane.getChildren().add(largeMapPane);
+
+            singleGame15 = new Scene(largeMapStackPane);
+        }
+
+
         window.setTitle("Tic-Tac-Toe");
         window.setResizable(false);
         window.setScene(menuScene);

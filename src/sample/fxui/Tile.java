@@ -57,9 +57,6 @@ public class Tile extends StackPane {
             case 10:
                 text.setFont(Font.font(28));
                 break;
-            case 5:
-                text.setFont(Font.font(36));
-                break;
             case 3:
                 text.setFont(Font.font(48));
                 break;
