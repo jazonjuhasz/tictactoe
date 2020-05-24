@@ -4,9 +4,12 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.scene.layout.StackPane;
+import javafx.geometry.Pos;
+
 
 public class Main extends Application {
     Stage window;
@@ -26,37 +29,51 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
-        int menuBtnSizeX = 140;
-        int menuBtnSizeY = 60;
+        int menuWidth = 750;
+        int menuHeight = 750;
+        int menuBtnWidth = 260;
+        int menuBtnHeight = 100;
 
-        //main menu
+        double btnMiddleX = (double)(menuWidth - menuBtnWidth) / 2;
+
+        //main menu, buttons
         {
             StackPane menu = new StackPane();
 
             Pane menuBase = new Pane();
-            menuBase.setPrefSize(600, 600);
+            menuBase.setPrefSize(menuWidth, menuHeight);
 
-            Buttons smallGameButton = new Buttons(menuBtnSizeX, menuBtnSizeY);
+            Buttons smallGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
             smallGameButton.createButton(smallGameButton);
             smallGameButton.text.setText("small");
-            smallGameButton.setTranslateX(120);
-            smallGameButton.setTranslateY(80);
+            smallGameButton.setTranslateX(btnMiddleX);
+            smallGameButton.setTranslateY(100);
 
-            Buttons midGameButton = new Buttons(menuBtnSizeX, menuBtnSizeY);
+            Buttons midGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
             midGameButton.createButton(midGameButton);
             midGameButton.text.setText("medium");
-            midGameButton.setTranslateX(120);
-            midGameButton.setTranslateY(180);
+            midGameButton.setTranslateX(btnMiddleX);
+            midGameButton.setTranslateY(250);
 
-            Buttons largeGameButton = new Buttons(menuBtnSizeX, menuBtnSizeY);
+            Buttons largeGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
             largeGameButton.createButton(midGameButton);
             largeGameButton.text.setText("large");
-            largeGameButton.setTranslateX(120);
-            largeGameButton.setTranslateY(280);
+            largeGameButton.setTranslateX(btnMiddleX);
+            largeGameButton.setTranslateY(400);
 
-            menuBase.getChildren().addAll(smallGameButton, midGameButton, largeGameButton);
-            menu.getChildren().add(menuBase);
-            menuScene = new Scene(menu);
+            Buttons exitButton = new Buttons(menuBtnWidth, menuBtnHeight);
+            exitButton.createButton(exitButton);
+            exitButton.text.setText("exit");
+            exitButton.setTranslateX(btnMiddleX);
+            exitButton.setTranslateY(600);
+            exitButton.changeBorderColor(exitButton.border, Color.RED);
+
+            menuBase.getChildren().addAll(
+                    smallGameButton,
+                    midGameButton,
+                    largeGameButton,
+                    exitButton
+            );
 
             smallGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> window.setScene(singleGame3));
@@ -64,6 +81,12 @@ public class Main extends Application {
                     (event) -> window.setScene(singleGame10));
             largeGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> window.setScene(singleGame15));
+            exitButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event -> System.exit(0)));
+
+
+            menu.getChildren().add(menuBase);
+            menuScene = new Scene(menu);
         }
 
         //size: THREE

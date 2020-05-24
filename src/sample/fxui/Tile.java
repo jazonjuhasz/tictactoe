@@ -80,13 +80,15 @@ public class Tile extends StackPane {
         Glow glow = new Glow();
 
         setOnMouseEntered(event -> {
-            glow.setLevel(0.9);
-            setEffect(glow);
+            //glow.setLevel(0.9);
+            //setEffect(glow);
+            border.setFill(Color.WHITESMOKE.brighter());
         });
 
         setOnMouseExited(event -> {
-            glow.setLevel(0);
-            setEffect(glow);
+            //glow.setLevel(0);
+            //setEffect(glow);
+            border.setFill(Color.WHITESMOKE);
         });
     }
 
