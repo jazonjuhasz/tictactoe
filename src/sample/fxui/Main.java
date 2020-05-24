@@ -34,7 +34,7 @@ public class Main extends Application {
         int menuBtnWidth = 260;
         int menuBtnHeight = 100;
 
-        double btnMiddleX = (double)(menuWidth - menuBtnWidth) / 2;
+        double btnMiddleX = (double) (menuWidth - menuBtnWidth) / 2;
 
         //main menu, buttons
         {
@@ -43,6 +43,28 @@ public class Main extends Application {
             Pane menuBase = new Pane();
             menuBase.setPrefSize(menuWidth, menuHeight);
 
+            // main page
+            Buttons singleplayerBtn = new Buttons(menuBtnWidth, menuBtnHeight);
+            singleplayerBtn.createButton(singleplayerBtn);
+            singleplayerBtn.text.setText("singleplayer");
+            singleplayerBtn.setTranslateX(btnMiddleX);
+            singleplayerBtn.setTranslateY(100);
+
+            Buttons multiPlayerBtn = new Buttons(menuBtnWidth, menuBtnHeight);
+            multiPlayerBtn.createButton(multiPlayerBtn);
+            multiPlayerBtn.text.setText("multiplayer");
+            multiPlayerBtn.setTranslateX(btnMiddleX);
+            multiPlayerBtn.setTranslateY(250);
+
+            Buttons exitButton = new Buttons(menuBtnWidth, menuBtnHeight);
+            exitButton.createButton(exitButton);
+            exitButton.text.setText("exit");
+            exitButton.setTranslateX(btnMiddleX);
+            exitButton.setTranslateY(600);
+            exitButton.changeBorderColor(exitButton.border, Color.RED);
+
+
+            // singleplayer page
             Buttons smallGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
             smallGameButton.createButton(smallGameButton);
             smallGameButton.text.setText("small");
@@ -56,24 +78,90 @@ public class Main extends Application {
             midGameButton.setTranslateY(250);
 
             Buttons largeGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
-            largeGameButton.createButton(midGameButton);
+            largeGameButton.createButton(largeGameButton);
             largeGameButton.text.setText("large");
             largeGameButton.setTranslateX(btnMiddleX);
             largeGameButton.setTranslateY(400);
 
-            Buttons exitButton = new Buttons(menuBtnWidth, menuBtnHeight);
-            exitButton.createButton(exitButton);
-            exitButton.text.setText("exit");
-            exitButton.setTranslateX(btnMiddleX);
-            exitButton.setTranslateY(600);
-            exitButton.changeBorderColor(exitButton.border, Color.RED);
+            Buttons backBtn = new Buttons(menuBtnWidth, menuBtnHeight);
+            backBtn.createButton(backBtn);
+            backBtn.text.setText("back");
+            backBtn.setTranslateX(btnMiddleX);
+            backBtn.setTranslateY(600);
+
+            // multiplayer page
+            Buttons createGameBtn = new Buttons(menuBtnWidth, menuBtnHeight);
+            createGameBtn.createButton(createGameBtn);
+            createGameBtn.text.setText("create");
+            createGameBtn.setTranslateX(btnMiddleX);
+            createGameBtn.setTranslateY(100);
+
+            Buttons joinGameBtn = new Buttons(menuBtnWidth, menuBtnHeight);
+            joinGameBtn.createButton(joinGameBtn);
+            joinGameBtn.text.setText("join");
+            joinGameBtn.setTranslateX(btnMiddleX);
+            joinGameBtn.setTranslateY(250);
+
+            Buttons hotSeatGameBtn = new Buttons(menuBtnWidth, menuBtnHeight);
+            hotSeatGameBtn.createButton(hotSeatGameBtn);
+            hotSeatGameBtn.text.setText("hot-seat");
+            hotSeatGameBtn.setTranslateX(btnMiddleX);
+            hotSeatGameBtn.setTranslateY(400);
+
 
             menuBase.getChildren().addAll(
-                    smallGameButton,
-                    midGameButton,
-                    largeGameButton,
+                    singleplayerBtn,
+                    multiPlayerBtn,
                     exitButton
             );
+
+
+            // singleplayer (click) for each
+            singleplayerBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> menuBase.getChildren().removeAll(
+                            singleplayerBtn,
+                            multiPlayerBtn,
+                            exitButton
+                    ));
+            singleplayerBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> menuBase.getChildren().addAll(
+                            smallGameButton,
+                            midGameButton,
+                            largeGameButton,
+                            backBtn
+                    ));
+            backBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> menuBase.getChildren().removeAll(
+                            smallGameButton,
+                            midGameButton,
+                            largeGameButton,
+                            joinGameBtn,
+                            createGameBtn,
+                            hotSeatGameBtn,
+                            backBtn
+                    ));
+            backBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> menuBase.getChildren().addAll(
+                            singleplayerBtn,
+                            multiPlayerBtn,
+                            exitButton
+                    ));
+
+            // multiplayer (click) for each
+            multiPlayerBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> menuBase.getChildren().removeAll(
+                            singleplayerBtn,
+                            multiPlayerBtn,
+                            exitButton
+                    ));
+            multiPlayerBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> menuBase.getChildren().addAll(
+                            createGameBtn,
+                            joinGameBtn,
+                            hotSeatGameBtn,
+                            backBtn
+                    ));
+
 
             smallGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> window.setScene(singleGame3));
@@ -149,7 +237,7 @@ public class Main extends Application {
             singleGame15 = new Scene(largeMapStackPane);
         }
 
-
+        // let's roll!
         window.setTitle("Tic-Tac-Toe");
         window.setResizable(false);
         window.setScene(menuScene);
