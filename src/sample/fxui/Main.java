@@ -19,96 +19,70 @@ public class Main extends Application {
             singleGame10,
             singleGame15;
 
-    int three = 3;
-    int ten = 10;
-    int fifteen = 15;
+    int smallMapSize = 3;
+    int medMapSize = 10;
+    int largeMapSize = 15;
 
-    Tile tile3 = new Tile(three);
-    Tile tile10 = new Tile(ten);
-    Tile tile15 = new Tile(fifteen);
+    int menuWidth = 750;
+    int menuHeight = 750;
+    int menuBtnWidth = 260;
+    int menuBtnHeight = 100;
+    double btnMiddleX = (double) (menuWidth - menuBtnWidth) / 2;
+
+    private void menuBtnCreator(Buttons name, String text, int heightOnPane) {
+        //maybe should use a map to store buttons objects
+        //but it would be only one line less per button
+        //meh..
+        //maybe w a matrix w params and a foreach......
+        name.createButton(name);
+        name.text.setText(text);
+        name.setTranslateX(btnMiddleX);
+        name.setTranslateY(heightOnPane);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
-        int menuWidth = 750;
-        int menuHeight = 750;
-        int menuBtnWidth = 260;
-        int menuBtnHeight = 100;
-
-        double btnMiddleX = (double) (menuWidth - menuBtnWidth) / 2;
 
         //main menu, buttons
         {
             StackPane menu = new StackPane();
-
             Pane menuBase = new Pane();
             menuBase.setPrefSize(menuWidth, menuHeight);
 
             // main page
             Buttons singleplayerBtn = new Buttons(menuBtnWidth, menuBtnHeight);
-            singleplayerBtn.createButton(singleplayerBtn);
-            singleplayerBtn.text.setText("singleplayer");
-            singleplayerBtn.setTranslateX(btnMiddleX);
-            singleplayerBtn.setTranslateY(100);
+            menuBtnCreator(singleplayerBtn, "singleplayer", 100);
 
             Buttons multiPlayerBtn = new Buttons(menuBtnWidth, menuBtnHeight);
-            multiPlayerBtn.createButton(multiPlayerBtn);
-            multiPlayerBtn.text.setText("multiplayer");
-            multiPlayerBtn.setTranslateX(btnMiddleX);
-            multiPlayerBtn.setTranslateY(250);
+            menuBtnCreator(multiPlayerBtn, "multiplayer", 250);
 
             Buttons exitButton = new Buttons(menuBtnWidth, menuBtnHeight);
-            exitButton.createButton(exitButton);
-            exitButton.text.setText("exit");
-            exitButton.setTranslateX(btnMiddleX);
-            exitButton.setTranslateY(600);
+            menuBtnCreator(exitButton, "exit", 600);
             exitButton.changeBorderColor(exitButton.border, Color.RED);
-
 
             // singleplayer page
             Buttons smallGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
-            smallGameButton.createButton(smallGameButton);
-            smallGameButton.text.setText("small");
-            smallGameButton.setTranslateX(btnMiddleX);
-            smallGameButton.setTranslateY(100);
+            menuBtnCreator(smallGameButton, "small", 100);
 
             Buttons midGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
-            midGameButton.createButton(midGameButton);
-            midGameButton.text.setText("medium");
-            midGameButton.setTranslateX(btnMiddleX);
-            midGameButton.setTranslateY(250);
+            menuBtnCreator(midGameButton, "medium", 250);
 
             Buttons largeGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
-            largeGameButton.createButton(largeGameButton);
-            largeGameButton.text.setText("large");
-            largeGameButton.setTranslateX(btnMiddleX);
-            largeGameButton.setTranslateY(400);
+            menuBtnCreator(largeGameButton, "large", 400);
 
             Buttons backBtn = new Buttons(menuBtnWidth, menuBtnHeight);
-            backBtn.createButton(backBtn);
-            backBtn.text.setText("back");
-            backBtn.setTranslateX(btnMiddleX);
-            backBtn.setTranslateY(600);
+            menuBtnCreator(backBtn, "back", 600);
 
             // multiplayer page
             Buttons createGameBtn = new Buttons(menuBtnWidth, menuBtnHeight);
-            createGameBtn.createButton(createGameBtn);
-            createGameBtn.text.setText("create");
-            createGameBtn.setTranslateX(btnMiddleX);
-            createGameBtn.setTranslateY(100);
+            menuBtnCreator(createGameBtn, "create", 100);
 
             Buttons joinGameBtn = new Buttons(menuBtnWidth, menuBtnHeight);
-            joinGameBtn.createButton(joinGameBtn);
-            joinGameBtn.text.setText("join");
-            joinGameBtn.setTranslateX(btnMiddleX);
-            joinGameBtn.setTranslateY(250);
+            menuBtnCreator(joinGameBtn, "join", 250);
 
             Buttons hotSeatGameBtn = new Buttons(menuBtnWidth, menuBtnHeight);
-            hotSeatGameBtn.createButton(hotSeatGameBtn);
-            hotSeatGameBtn.text.setText("hot-seat");
-            hotSeatGameBtn.setTranslateX(btnMiddleX);
-            hotSeatGameBtn.setTranslateY(400);
-
+            menuBtnCreator(hotSeatGameBtn, "hot-seat", 400);
 
             menuBase.getChildren().addAll(
                     singleplayerBtn,
@@ -191,7 +165,7 @@ public class Main extends Application {
             Pane base = new Pane();
             base.setPrefSize(1200, 750);
 
-            base.getChildren().addAll(createContent(three), button1);
+            base.getChildren().addAll(createContent(smallMapSize), button1);
 
             tilesPane.getChildren().add(base);
 
@@ -211,7 +185,7 @@ public class Main extends Application {
             Pane midMapPane = new Pane();
             midMapPane.setPrefSize(1200, 750);
 
-            midMapPane.getChildren().addAll(createContent(ten), button2);
+            midMapPane.getChildren().addAll(createContent(medMapSize), button2);
 
             midMapStackPane.getChildren().add(midMapPane);
 
@@ -231,7 +205,7 @@ public class Main extends Application {
             Pane largeMapPane = new Pane();
             largeMapPane.setPrefSize(1200, 750);
 
-            largeMapPane.getChildren().addAll(createContent(fifteen), button3);
+            largeMapPane.getChildren().addAll(createContent(largeMapSize), button3);
 
             largeMapStackPane.getChildren().add(largeMapPane);
 

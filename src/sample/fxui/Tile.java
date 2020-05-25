@@ -76,17 +76,7 @@ public class Tile extends StackPane {
                     draw();
                     changePlayer();
                     // update board w id
-                    switch (tilesCount) {
-                        case 3:
-                            board3[i][j] = this.text.getText();
-                            break;
-                        case 10:
-                            board10[i][j] = this.text.getText();
-                            break;
-                        case 15:
-                            board15[i][j] = this.text.getText();
-                            break;
-                    }
+                    tileTextToArray();
                     System.out.println(Arrays.deepToString(board3));
                 }
 
@@ -118,6 +108,20 @@ public class Tile extends StackPane {
             currentPlayerSign = "O";
         } else {
             currentPlayerSign = "X";
+        }
+    }
+
+    private void tileTextToArray() {
+        switch (tilesCount) {
+            case 3:
+                board3[i][j] = this.text.getText();
+                break;
+            case 10:
+                board10[i][j] = this.text.getText();
+                break;
+            case 15:
+                board15[i][j] = this.text.getText();
+                break;
         }
     }
 }
