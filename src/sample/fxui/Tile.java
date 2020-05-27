@@ -29,11 +29,26 @@ public class Tile extends StackPane {
     private Text text = new Text();
     boolean writeAble = text.getText().isEmpty();
 
+    static Buttons nextPlayerDisplay;
+    static Buttons winnerDisplay;
+
+
     public static Parent createContent(int tilesCount) {
         double boardSize = 750.0 / tilesCount;
 
         Pane root = new Pane();
         root.setPrefSize(1200, 750);
+
+        nextPlayerDisplay = new Buttons(120, 120);
+        Main.menuBtnCreator(nextPlayerDisplay, "", 915, 100);
+        nextPlayerDisplay.changeBorderColor(nextPlayerDisplay.border, Color.WHITESMOKE);
+        nextPlayerDisplay.setText(currentPlayerSign);
+
+        winnerDisplay = new Buttons(120, 120);
+        Main.menuBtnCreator(winnerDisplay, "", 916, 300);
+        winnerDisplay.changeBorderColor(winnerDisplay.border, Color.WHITESMOKE);
+
+        root.getChildren().addAll(nextPlayerDisplay, winnerDisplay);
 
         for (int i = 0; i < tilesCount; i++) {
             for (int j = 0; j < tilesCount; j++) {
@@ -84,7 +99,9 @@ public class Tile extends StackPane {
                     draw();
                     changePlayer();
                     tileTextToArray();
+                    nextPlayerDisplay.setText(currentPlayerSign);
                     checkWinners();
+
                 }
             }
         });
@@ -247,22 +264,28 @@ public class Tile extends StackPane {
             case 3:
                 hasWonX = chickenDinner("X", board3, 3);
                 hasWonO = chickenDinner("O", board3, 3);
-                gameOver();
+                isgameOver();
+
                 break;
             case 10:
                 hasWonX = chickenDinner("X", board10, 5);
                 hasWonO = chickenDinner("O", board10, 5);
-                gameOver();
+                isgameOver();
                 break;
             case 15:
                 hasWonX = chickenDinner("X", board15, 5);
                 hasWonO = chickenDinner("O", board15, 5);
-                gameOver();
+                isgameOver();
                 break;
+        }
+
+        if(isEnded) {
+            winnerDisplay.setWinnerText();
+            nextPlayerDisplay.setText("");
         }
     }
 
-    private void gameOver() {
+    private void isgameOver() {
         if (hasWonO || hasWonX) {
             isEnded = true;
         }

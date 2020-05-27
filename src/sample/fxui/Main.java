@@ -31,7 +31,7 @@ public class Main extends Application {
     int menuBtnHeight = 100;
     int btnMiddleX = (int) (menuWidth - menuBtnWidth) / 2;
 
-    private void menuBtnCreator(Buttons name, String text, int widthOnPane, int heightOnPane) {
+    public static void menuBtnCreator(Buttons name, String text, int widthOnPane, int heightOnPane) {
         //maybe should use a map to store buttons objects
         //but it would be only one line less per button
         //meh..
@@ -57,34 +57,34 @@ public class Main extends Application {
             menuBtnCreator(singleplayerBtn, "singleplayer", btnMiddleX, 100);
 
             Buttons multiPlayerBtn = new Buttons(menuBtnWidth, menuBtnHeight);
-            menuBtnCreator(multiPlayerBtn, "multiplayer", btnMiddleX,250);
+            menuBtnCreator(multiPlayerBtn, "multiplayer", btnMiddleX, 250);
 
             Buttons exitButton = new Buttons(menuBtnWidth, menuBtnHeight);
-            menuBtnCreator(exitButton, "exit", btnMiddleX,600);
+            menuBtnCreator(exitButton, "exit", btnMiddleX, 600);
             exitButton.changeBorderColor(exitButton.border, Color.RED);
 
             // singleplayer page
             Buttons smallGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
-            menuBtnCreator(smallGameButton, "small", btnMiddleX,100);
+            menuBtnCreator(smallGameButton, "small", btnMiddleX, 100);
 
             Buttons midGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
-            menuBtnCreator(midGameButton, "medium", btnMiddleX,250);
+            menuBtnCreator(midGameButton, "medium", btnMiddleX, 250);
 
             Buttons largeGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
-            menuBtnCreator(largeGameButton, "large", btnMiddleX,400);
+            menuBtnCreator(largeGameButton, "large", btnMiddleX, 400);
 
             Buttons backBtn = new Buttons(menuBtnWidth, menuBtnHeight);
-            menuBtnCreator(backBtn, "back", btnMiddleX,600);
+            menuBtnCreator(backBtn, "back", btnMiddleX, 600);
 
             // multiplayer page
             Buttons createGameBtn = new Buttons(menuBtnWidth, menuBtnHeight);
-            menuBtnCreator(createGameBtn, "create", btnMiddleX,100);
+            menuBtnCreator(createGameBtn, "create", btnMiddleX, 100);
 
             Buttons joinGameBtn = new Buttons(menuBtnWidth, menuBtnHeight);
-            menuBtnCreator(joinGameBtn, "join", btnMiddleX,250);
+            menuBtnCreator(joinGameBtn, "join", btnMiddleX, 250);
 
             Buttons hotSeatGameBtn = new Buttons(menuBtnWidth, menuBtnHeight);
-            menuBtnCreator(hotSeatGameBtn, "hot-seat", btnMiddleX,400);
+            menuBtnCreator(hotSeatGameBtn, "hot-seat", btnMiddleX, 400);
 
             menuBase.getChildren().addAll(
                     singleplayerBtn,
@@ -197,37 +197,54 @@ public class Main extends Application {
         {
             Pane largeMapPane = new Pane();
             StackPane largeMapStackPane = new StackPane();
+
             Buttons resetBtn = new Buttons(200, 60);
-            menuBtnCreator(resetBtn, "reset", 875,600);
-            resetBtn.changeFontSize(resetBtn, 32);
+            menuBtnCreator(resetBtn, "reset", 875, 600);
+            resetBtn.changeFontSize(32);
 
             Buttons backToMenuBtn = new Buttons(200, 60);
             menuBtnCreator(backToMenuBtn, "back", 875, 450);
-            backToMenuBtn.changeFontSize(backToMenuBtn, 32);
+            backToMenuBtn.changeFontSize(32);
+
+            /*Buttons nextPlayerDisplay = new Buttons(120, 120);
+            menuBtnCreator(nextPlayerDisplay, "", 915, 100);
+            nextPlayerDisplay.changeBorderColor(nextPlayerDisplay.border, Color.WHITESMOKE);*/
 
 
             resetBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> {
-                //window.setScene(menuScene);
-                largeMapPane.getChildren().clear();
-                largeMapPane.getChildren().addAll(createContent(largeMapSize), resetBtn, backToMenuBtn);
-                Tile.eraseBoard(board15);
-                System.gc();
-            });
+                        //window.setScene(menuScene);
+                        largeMapPane.getChildren().clear();
+                        largeMapPane.getChildren().addAll(
+                                createContent(largeMapSize),
+                                resetBtn,
+                                backToMenuBtn
+                        );
+                        Tile.eraseBoard(board15);
+                        System.gc();
+                    });
 
 
             backToMenuBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> {
                         window.setScene(menuScene);
                         largeMapPane.getChildren().clear();
-                        largeMapPane.getChildren().addAll(createContent(largeMapSize), resetBtn, backToMenuBtn);
+                        largeMapPane.getChildren().addAll(
+                                createContent(largeMapSize),
+                                resetBtn,
+                                backToMenuBtn
+                        );
                         Tile.eraseBoard(board15);
                         System.gc();
                     });
 
             largeMapPane.setPrefSize(1200, 750);
 
-            largeMapPane.getChildren().addAll(createContent(largeMapSize), resetBtn, backToMenuBtn);
+            largeMapPane.getChildren().addAll(
+                    createContent(largeMapSize),
+                    resetBtn,
+                    backToMenuBtn
+            );
 
             largeMapStackPane.getChildren().add(largeMapPane);
 
