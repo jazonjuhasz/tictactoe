@@ -1,11 +1,8 @@
 package sample.fxui;
 
-import java.lang.reflect.Array;
-
 public class ChickenDinner {
 
     enum State {Blank, X, O}
-
 
     int n = 3;
     State[][] board = new State[n][n];

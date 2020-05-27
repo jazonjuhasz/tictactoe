@@ -38,17 +38,11 @@ public class Buttons extends StackPane {
         setAlignment(Pos.CENTER);
         getChildren().addAll(border, text);
 
-        Glow glow = new Glow();
-
         setOnMouseEntered(event -> {
-            //glow.setLevel(0.9);
-            //setEffect(glow);
             border.setFill(Color.WHITESMOKE.brighter());
         });
 
         setOnMouseExited(event -> {
-            //glow.setLevel(0);
-            //setEffect(glow);
             border.setFill(Color.WHITESMOKE);
 
         });
@@ -60,6 +54,10 @@ public class Buttons extends StackPane {
 
     public void changeFillColor(Rectangle rectangle, Color color) {
         rectangle.setFill(color);
+    }
+
+    public void changeFontSize(Buttons button, int size) {
+        this.text.setFont(Font.font(size));
     }
 
 
