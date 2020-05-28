@@ -32,7 +32,6 @@ public class Tile extends StackPane {
     static Buttons nextPlayerDisplay;
     static Buttons winnerDisplay;
 
-
     public static Parent createContent(int tilesCount) {
         double boardSize = 750.0 / tilesCount;
 
@@ -76,7 +75,6 @@ public class Tile extends StackPane {
         border.setFill(Color.WHITESMOKE);
         border.setStroke(Color.BLACK);
 
-        //setting mark size depending on tiles count
         switch (tilesCount) {
             case 15:
                 text.setFont(Font.font(20));
@@ -101,7 +99,6 @@ public class Tile extends StackPane {
                     tileTextToArray();
                     nextPlayerDisplay.setText(currentPlayerSign);
                     checkWinners();
-
                 }
             }
         });
@@ -264,21 +261,18 @@ public class Tile extends StackPane {
             case 3:
                 hasWonX = chickenDinner("X", board3, 3);
                 hasWonO = chickenDinner("O", board3, 3);
-                isgameOver();
-
                 break;
             case 10:
                 hasWonX = chickenDinner("X", board10, 5);
                 hasWonO = chickenDinner("O", board10, 5);
-                isgameOver();
                 break;
             case 15:
                 hasWonX = chickenDinner("X", board15, 5);
                 hasWonO = chickenDinner("O", board15, 5);
-                isgameOver();
                 break;
         }
 
+        isgameOver();
         if(isEnded) {
             winnerDisplay.setWinnerText();
             nextPlayerDisplay.setText("");

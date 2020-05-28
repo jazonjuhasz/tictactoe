@@ -42,7 +42,6 @@ public class Buttons extends StackPane {
 
         setOnMouseExited(event -> {
             border.setFill(Color.WHITESMOKE);
-
         });
     }
 
@@ -69,6 +68,4 @@ public class Buttons extends StackPane {
             this.text.setText("O");
         }
     }
-
-
 }
