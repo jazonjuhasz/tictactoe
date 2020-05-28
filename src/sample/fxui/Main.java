@@ -25,7 +25,7 @@ public class Main extends Application {
     int menuHeight = 750;
     int menuBtnWidth = 260;
     int menuBtnHeight = 100;
-    int btnMiddleX = (int) (menuWidth - menuBtnWidth) / 2;
+    int btnMiddleX = (menuWidth - menuBtnWidth) / 2;
 
     public static void menuBtnCreator(Buttons name, String text, int widthOnPane, int heightOnPane) {
         name.createButton(name);
@@ -267,7 +267,6 @@ public class Main extends Application {
         Pane largeMapPane = new Pane();
         StackPane largeMapStackPane = new StackPane();
         largeMapStackPane.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, CornerRadii.EMPTY, Insets.EMPTY)));
-
 
         Buttons resetBtn = new Buttons(200, 60);
         menuBtnCreator(resetBtn, "reset", 875, 530);

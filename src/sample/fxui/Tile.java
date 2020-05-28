@@ -11,11 +11,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class Tile extends StackPane {
-    //static int id = 0;
+
     static boolean isEnded = false;
     static boolean hasWonX = false;
     static boolean hasWonO = false;
-
 
     public static String[][] board3 = new String[3][3];
     public static String[][] board10 = new String[10][10];
@@ -31,6 +30,8 @@ public class Tile extends StackPane {
 
     static Buttons nextPlayerDisplay;
     static Buttons winnerDisplay;
+    static Buttons currentPlayerText;
+    static Buttons winnerText;
 
     public static Parent createContent(int tilesCount) {
         double boardSize = 750.0 / tilesCount;
@@ -42,12 +43,26 @@ public class Tile extends StackPane {
         Main.menuBtnCreator(nextPlayerDisplay, "", 915, 100);
         nextPlayerDisplay.changeBorderColor(nextPlayerDisplay.border, Color.WHITESMOKE);
         nextPlayerDisplay.setText(currentPlayerSign);
+        nextPlayerDisplay.changeOnMouseColor(Color.WHITESMOKE);
 
         winnerDisplay = new Buttons(120, 120);
         Main.menuBtnCreator(winnerDisplay, "", 916, 300);
         winnerDisplay.changeBorderColor(winnerDisplay.border, Color.WHITESMOKE);
+        winnerDisplay.changeOnMouseColor(Color.WHITESMOKE);
 
-        root.getChildren().addAll(nextPlayerDisplay, winnerDisplay);
+        currentPlayerText = new Buttons(100, 50);
+        Main.menuBtnCreator(currentPlayerText, "next:", 850, 133);
+        currentPlayerText.changeBorderColor(currentPlayerText.border, Color.WHITESMOKE);
+        currentPlayerText.changeFontSize(32);
+        currentPlayerText.changeOnMouseColor(Color.WHITESMOKE);
+
+        winnerText = new Buttons(400, 100);
+        Main.menuBtnCreator(winnerText, "", 780, 220);
+        winnerText.changeBorderColor(winnerText.border, Color.WHITESMOKE);
+        winnerText.changeOnMouseColor(Color.WHITESMOKE);
+        winnerText.changeFontSize(26);
+
+        root.getChildren().addAll(nextPlayerDisplay, winnerDisplay, currentPlayerText, winnerText);
 
         for (int i = 0; i < tilesCount; i++) {
             for (int j = 0; j < tilesCount; j++) {
@@ -280,6 +295,8 @@ public class Tile extends StackPane {
         if(isEnded) {
             winnerDisplay.setWinnerText();
             nextPlayerDisplay.setText("");
+            currentPlayerText.setText("");
+            winnerText.setText("winner winner chicken dinner!");
         }
     }
 

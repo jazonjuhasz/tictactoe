@@ -14,6 +14,7 @@ public class Buttons extends StackPane {
     Rectangle border;
     int xSize;
     int ySize;
+    private Color fillColorOnMouse = Color.WHITESMOKE.brighter();
 
     public Parent createButton(Buttons button) {
         Pane root = new Pane();
@@ -37,7 +38,7 @@ public class Buttons extends StackPane {
         getChildren().addAll(border, text);
 
         setOnMouseEntered(event -> {
-            border.setFill(Color.WHITESMOKE.brighter());
+            border.setFill(fillColorOnMouse);
         });
 
         setOnMouseExited(event -> {
@@ -51,6 +52,10 @@ public class Buttons extends StackPane {
 
     public void changeFillColor(Rectangle rectangle, Color color) {
         rectangle.setFill(color);
+    }
+
+    public void changeOnMouseColor(Color color) {
+        this.fillColorOnMouse = color;
     }
 
     public void changeFontSize(int size) {
