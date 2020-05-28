@@ -153,6 +153,7 @@ public class Tile extends StackPane {
         // rows and cols
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map.length; j++) {
+                rowCounter = 0;
                 if (map[i][j].equals(player)) {
                     rowCounter++;
                 } else rowCounter = 0;
@@ -161,7 +162,7 @@ public class Tile extends StackPane {
                     colCounter++;
                 } else colCounter = 0;
 
-                if (rowCounter == winCount || colCounter == winCount) {
+                if ((rowCounter == winCount) || (colCounter == winCount)) {
                     return true;
                 }
             }
@@ -175,6 +176,7 @@ public class Tile extends StackPane {
             int colIndex;
 
             if (i <= midpoint) {
+                diagCounter = 0;
                 itemsInDiagonal++;
                 for (int j = 0; j < itemsInDiagonal; j++) {
                     rowIndex = i - j - 1;
@@ -190,6 +192,7 @@ public class Tile extends StackPane {
                 }
             }
             if (i > midpoint) {
+                diagCounter = 0;
                 itemsInDiagonal--;
                 for (int j = 0; j < itemsInDiagonal; j++) {
                     rowIndex = (length - 1) - j;
@@ -213,6 +216,7 @@ public class Tile extends StackPane {
             if (i > midpoint) {
                 itemsInDiagonal2--;
                 for (int j = 0; j < itemsInDiagonal2; j++) {
+                    revDiagcounter = 0;
                     rowIndex = j;
                     colIndex = (i - length) + j;
                     if (map[rowIndex][colIndex].equals(player)) {
@@ -228,6 +232,7 @@ public class Tile extends StackPane {
             if (i <= midpoint) {
                 itemsInDiagonal2++;
                 for (int j = 0; j < itemsInDiagonal2; j++) {
+                    revDiagcounter = 0;
                     rowIndex = (length - 1) - j;
                     colIndex = i - j - 1;
                     if (map[rowIndex][colIndex].equals(player)) {
