@@ -23,6 +23,7 @@ public class Tile extends StackPane {
     int tilesCount;
     int i;
     int j;
+    static int movesCount = 0;
 
     static String currentPlayerSign = "X";
     private Text text = new Text();
@@ -113,6 +114,7 @@ public class Tile extends StackPane {
                     changePlayer();
                     tileTextToArray();
                     nextPlayerDisplay.setText(currentPlayerSign);
+                    movesCount++;
                     checkWinners();
                 }
             }
@@ -297,6 +299,11 @@ public class Tile extends StackPane {
             nextPlayerDisplay.setText("");
             currentPlayerText.setText("");
             winnerText.setText("winner winner chicken dinner!");
+        }
+        if(movesCount == tilesCount * tilesCount) {
+            nextPlayerDisplay.setText("");
+            currentPlayerText.setText("");
+            winnerText.setText("oh c'mon");
         }
     }
 
