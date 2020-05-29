@@ -35,6 +35,7 @@ public class Tile extends StackPane {
     static Buttons winnerText;
 
     public static Parent createContent(int tilesCount) {
+        movesCount = 0;
         double boardSize = 750.0 / tilesCount;
 
         Pane root = new Pane();
