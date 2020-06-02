@@ -293,24 +293,19 @@ public class Tile extends StackPane {
                 hasWonO = chickenDinner("O", board15, 5);
                 break;
         }
-
-        isgameOver();
+        if (hasWonO || hasWonX) {
+            isEnded = true;
+        }
         if(isEnded) {
             winnerDisplay.setWinnerText();
             nextPlayerDisplay.setText("");
             currentPlayerText.setText("");
             winnerText.setText("winner winner chicken dinner!");
         }
-        if(movesCount == tilesCount * tilesCount) {
+        if(movesCount == tilesCount * tilesCount && !isEnded) {
             nextPlayerDisplay.setText("");
             currentPlayerText.setText("");
             winnerText.setText("oh c'mon");
-        }
-    }
-
-    private void isgameOver() {
-        if (hasWonO || hasWonX) {
-            isEnded = true;
         }
     }
 }
