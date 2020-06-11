@@ -10,55 +10,63 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
+
 public class Tile extends StackPane {
 
     static boolean isEnded = false;
     static boolean hasWonX = false;
     static boolean hasWonO = false;
 
+    static boolean isServer;
+    static boolean isMultiplayer;
+    static boolean isMyTurn = true;
+
     public static String[][] board3 = new String[3][3];
     public static String[][] board10 = new String[10][10];
     public static String[][] board15 = new String[15][15];
+    public static Tile[][] tilesArray;
 
-    int tilesCount;
+    public static int tilesCount;
     int i;
     int j;
     static int movesCount = 0;
 
     static String currentPlayerSign = "X";
-    private Text text = new Text();
+    public Text text = new Text();
     boolean writeAble = text.getText().isEmpty();
 
-    static Buttons nextPlayerDisplay;
-    static Buttons winnerDisplay;
-    static Buttons currentPlayerText;
-    static Buttons winnerText;
+    static Button nextPlayerDisplay;
+    static Button winnerDisplay;
+    static Button currentPlayerText;
+    static Button winnerText;
 
     public static Parent createContent(int tilesCount) {
+        tilesArray = new Tile[tilesCount][tilesCount];
         movesCount = 0;
         double boardSize = 750.0 / tilesCount;
 
         Pane root = new Pane();
         root.setPrefSize(1200, 750);
 
-        nextPlayerDisplay = new Buttons(120, 120);
+        nextPlayerDisplay = new Button(120, 120);
         Main.menuBtnCreator(nextPlayerDisplay, "", 915, 100);
         nextPlayerDisplay.changeBorderColor(nextPlayerDisplay.border, Color.WHITESMOKE);
         nextPlayerDisplay.setText(currentPlayerSign);
         nextPlayerDisplay.changeOnMouseColor(Color.WHITESMOKE);
 
-        winnerDisplay = new Buttons(120, 120);
+        winnerDisplay = new Button(120, 120);
         Main.menuBtnCreator(winnerDisplay, "", 916, 300);
         winnerDisplay.changeBorderColor(winnerDisplay.border, Color.WHITESMOKE);
         winnerDisplay.changeOnMouseColor(Color.WHITESMOKE);
 
-        currentPlayerText = new Buttons(100, 50);
+        currentPlayerText = new Button(100, 50);
         Main.menuBtnCreator(currentPlayerText, "next:", 850, 133);
         currentPlayerText.changeBorderColor(currentPlayerText.border, Color.WHITESMOKE);
         currentPlayerText.changeFontSize(32);
         currentPlayerText.changeOnMouseColor(Color.WHITESMOKE);
 
-        winnerText = new Buttons(400, 100);
+        winnerText = new Button(400, 100);
         Main.menuBtnCreator(winnerText, "", 780, 220);
         winnerText.changeBorderColor(winnerText.border, Color.WHITESMOKE);
         winnerText.changeOnMouseColor(Color.WHITESMOKE);
@@ -72,11 +80,9 @@ public class Tile extends StackPane {
                 tile.setTranslateX(j * boardSize);
                 tile.setTranslateY(i * boardSize);
                 root.getChildren().add(tile);
-                // add some kind of id
                 tile.i = i;
                 tile.j = j;
-                //id++;
-                //tile.setId(String.valueOf(id));
+                tilesArray[i][j] = tile;
             }
         }
         return root;
@@ -109,13 +115,14 @@ public class Tile extends StackPane {
 
         setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-                if (writeAble && !isEnded) {
+                if (writeAble && !isEnded && isMyTurn) {
                     writeAble = false;
                     draw();
-                    changePlayer();
                     tileTextToArray();
-                    nextPlayerDisplay.setText(currentPlayerSign);
+                    communicateWithOpponent();
                     movesCount++;
+                    changePlayer();
+                    nextPlayerDisplay.setText(currentPlayerSign);
                     checkWinners();
                 }
             }
@@ -132,8 +139,8 @@ public class Tile extends StackPane {
         text.setText(currentPlayerSign);
     }
 
-    private void changePlayer() {
-        if (currentPlayerSign == "X") {
+    public static void changePlayer() {
+        if (currentPlayerSign.equals("X")) {
             currentPlayerSign = "O";
         } else {
             currentPlayerSign = "X";
@@ -154,7 +161,7 @@ public class Tile extends StackPane {
         }
     }
 
-    private boolean chickenDinner(String player, String[][] map, int winCount) {
+    private static boolean chickenDinner(String player, String[][] map, int winCount) {
         // DO NOT TOUCH
         // its long, its unreadable, but works
         int rowCounter = 0;
@@ -278,7 +285,7 @@ public class Tile extends StackPane {
         }
     }
 
-    private void checkWinners() {
+    public static void checkWinners() {
         switch (tilesCount) {
             case 3:
                 hasWonX = chickenDinner("X", board3, 3);
@@ -296,16 +303,44 @@ public class Tile extends StackPane {
         if (hasWonO || hasWonX) {
             isEnded = true;
         }
-        if(isEnded) {
+        if (isEnded) {
             winnerDisplay.setWinnerText();
             nextPlayerDisplay.setText("");
             currentPlayerText.setText("");
             winnerText.setText("winner winner chicken dinner!");
         }
-        if(movesCount == tilesCount * tilesCount && !isEnded) {
+        if (movesCount == tilesCount * tilesCount && !isEnded) {
             nextPlayerDisplay.setText("");
             currentPlayerText.setText("");
             winnerText.setText("oh c'mon");
         }
+        if(isEnded && isMultiplayer) {
+            if (!isServer && hasWonX) {
+                winnerText.setText("better luck next time");
+            }
+            if (isServer && hasWonO) {
+                winnerText.setText("better luck next time");
+            }
+        }
+    }
+
+    private void communicateWithOpponent() {
+        if (isMultiplayer) {
+            if (!isServer) {
+                Main.client.sendMessage(
+                        "" +
+                                this.i + " " +
+                                this.j + " " +
+                                currentPlayerSign);
+            } else {
+                Main.server.sendMessage(
+                        "" +
+                                this.i + " " +
+                                this.j + " " +
+                                currentPlayerSign);
+            }
+            isMyTurn = false;
+        }
+
     }
 }

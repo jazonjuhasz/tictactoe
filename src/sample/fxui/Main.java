@@ -10,6 +10,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.layout.StackPane;
 
+import java.io.IOException;
+
 public class Main extends Application {
     Stage window;
     Scene menuScene,
@@ -26,8 +28,39 @@ public class Main extends Application {
     int menuBtnWidth = 260;
     int menuBtnHeight = 100;
     int btnMiddleX = (menuWidth - menuBtnWidth) / 2;
+    public static Server server;
+    public static Client client;
 
-    public static void menuBtnCreator(Buttons name, String text, int widthOnPane, int heightOnPane) {
+    Thread serverThread = new Thread() {
+        public void run() {
+            Tile.isMultiplayer = true;
+            Tile.isServer = true;
+            server = new Server();
+            try {
+                server.start(8080);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    Thread clientThread = new Thread() {
+        public void run() {
+            Tile.isMultiplayer = true;
+            Tile.isServer = false;
+            Tile.isMyTurn = false;
+            client = new Client();
+            try {
+                client.startConnection("localhost", 8080);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+
+    public static void menuBtnCreator(Button name, String text, int widthOnPane, int heightOnPane) {
         name.createButton(name);
         name.text.setText(text);
         name.setTranslateX(widthOnPane);
@@ -35,7 +68,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         window = primaryStage;
 
         //main menu, buttons
@@ -47,35 +80,53 @@ public class Main extends Application {
             menuBase.setPrefSize(menuWidth, menuHeight);
 
             // main page
-            Buttons singleplayerBtn = new Buttons(menuBtnWidth, menuBtnHeight);
+            Button singleplayerBtn = new Button(menuBtnWidth, menuBtnHeight);
             menuBtnCreator(singleplayerBtn, "hotseat", btnMiddleX, 100);
 
-            Buttons multiPlayerBtn = new Buttons(menuBtnWidth, menuBtnHeight);
+            Button multiPlayerBtn = new Button(menuBtnWidth, menuBtnHeight);
             menuBtnCreator(multiPlayerBtn, "lan", btnMiddleX, 250);
 
-            Buttons exitButton = new Buttons(menuBtnWidth, menuBtnHeight);
+            Button exitButton = new Button(menuBtnWidth, menuBtnHeight);
             menuBtnCreator(exitButton, "exit", btnMiddleX, 600);
             exitButton.changeBorderColor(exitButton.border, Color.RED);
 
             // singleplayer page
-            Buttons smallGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
+            Button smallGameButton = new Button(menuBtnWidth, menuBtnHeight);
             menuBtnCreator(smallGameButton, "small", btnMiddleX, 100);
 
-            Buttons midGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
+            Button midGameButton = new Button(menuBtnWidth, menuBtnHeight);
             menuBtnCreator(midGameButton, "medium", btnMiddleX, 250);
 
-            Buttons largeGameButton = new Buttons(menuBtnWidth, menuBtnHeight);
+            Button largeGameButton = new Button(menuBtnWidth, menuBtnHeight);
             menuBtnCreator(largeGameButton, "large", btnMiddleX, 400);
 
-            Buttons backBtn = new Buttons(menuBtnWidth, menuBtnHeight);
+            Button backBtn = new Button(menuBtnWidth, menuBtnHeight);
             menuBtnCreator(backBtn, "back", btnMiddleX, 600);
 
             // multiplayer page
-            Buttons createGameBtn = new Buttons(menuBtnWidth, menuBtnHeight);
+            Button createGameBtn = new Button(menuBtnWidth, menuBtnHeight);
             menuBtnCreator(createGameBtn, "create", btnMiddleX, 100);
 
-            Buttons joinGameBtn = new Buttons(menuBtnWidth, menuBtnHeight);
+            Button joinGameBtn = new Button(menuBtnWidth, menuBtnHeight);
             menuBtnCreator(joinGameBtn, "join", btnMiddleX, 250);
+
+            Button smallGameButtonLanServer = new Button(menuBtnWidth, menuBtnHeight);
+            menuBtnCreator(smallGameButtonLanServer, "small", btnMiddleX, 100);
+
+            Button midGameButtonLanServer = new Button(menuBtnWidth, menuBtnHeight);
+            menuBtnCreator(midGameButtonLanServer, "medium", btnMiddleX, 250);
+
+            Button largeGameButtonLanServer = new Button(menuBtnWidth, menuBtnHeight);
+            menuBtnCreator(largeGameButtonLanServer, "large", btnMiddleX, 400);
+
+            Button smallGameButtonLanClient = new Button(menuBtnWidth, menuBtnHeight);
+            menuBtnCreator(smallGameButtonLanClient, "small", btnMiddleX, 100);
+
+            Button midGameButtonLanClient = new Button(menuBtnWidth, menuBtnHeight);
+            menuBtnCreator(midGameButtonLanClient, "medium", btnMiddleX, 250);
+
+            Button largeGameButtonLanClient = new Button(menuBtnWidth, menuBtnHeight);
+            menuBtnCreator(largeGameButtonLanClient, "large", btnMiddleX, 400);
 
             menuBase.getChildren().addAll(
                     singleplayerBtn,
@@ -83,7 +134,7 @@ public class Main extends Application {
                     exitButton
             );
 
-            // singleplayer (click) for each
+            // hot-seat (click) for each
             singleplayerBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> menuBase.getChildren().removeAll(
                             singleplayerBtn,
@@ -100,12 +151,19 @@ public class Main extends Application {
             backBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> menuBase.getChildren().removeAll(
                             smallGameButton,
+                            smallGameButtonLanServer,
+                            smallGameButtonLanClient,
                             midGameButton,
+                            midGameButtonLanServer,
+                            midGameButtonLanClient,
                             largeGameButton,
+                            largeGameButtonLanServer,
+                            largeGameButtonLanClient,
                             joinGameBtn,
                             createGameBtn,
                             backBtn
                     ));
+
             backBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> menuBase.getChildren().addAll(
                             singleplayerBtn,
@@ -113,7 +171,9 @@ public class Main extends Application {
                             exitButton
                     ));
 
-            // multiplayer (click) for each
+            // lan (click) for each
+
+
             multiPlayerBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> menuBase.getChildren().removeAll(
                             singleplayerBtn,
@@ -125,23 +185,77 @@ public class Main extends Application {
                             createGameBtn,
                             joinGameBtn,
                             backBtn
+                    ));
+
+            createGameBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> menuBase.getChildren().removeAll(
+                            createGameBtn,
+                            joinGameBtn
+                    ));
+            createGameBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> menuBase.getChildren().addAll(
+                            smallGameButtonLanServer,
+                            midGameButtonLanServer,
+                            largeGameButtonLanServer
+                    ));
+
+            joinGameBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> menuBase.getChildren().removeAll(
+                            createGameBtn,
+                            joinGameBtn
+                    ));
+            joinGameBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> menuBase.getChildren().addAll(
+                            smallGameButtonLanClient,
+                            midGameButtonLanClient,
+                            largeGameButtonLanClient
                     ));
 
             smallGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                    (event) -> createSmallMap());
+                    (event) -> createSmallMap("hotseat", "none"));
             smallGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> window.setScene(singleGame3));
 
             midGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                    (event) -> createMedMap());
+                    (event) -> createMedMap("hotseat", "none"));
             midGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> window.setScene(singleGame10));
 
             largeGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                    (event) -> createLargeMap());
+                    (event) -> createLargeMap("hotseat", "none"));
             largeGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> window.setScene(singleGame15));
 
+            //lan stuff
+            smallGameButtonLanServer.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> createSmallMap("multi", "server"));
+            smallGameButtonLanServer.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> window.setScene(singleGame3));
+
+            midGameButtonLanServer.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> createMedMap("multi", "server"));
+            midGameButtonLanServer.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> window.setScene(singleGame10));
+
+            largeGameButtonLanServer.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> createLargeMap("multi", "server"));
+            largeGameButtonLanServer.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> window.setScene(singleGame15));
+
+            smallGameButtonLanClient.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> createSmallMap("multi", "client"));
+            smallGameButtonLanClient.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> window.setScene(singleGame3));
+
+            midGameButtonLanClient.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> createMedMap("multi", "client"));
+            midGameButtonLanClient.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> window.setScene(singleGame10));
+
+            largeGameButtonLanClient.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> createLargeMap("multi", "client"));
+            largeGameButtonLanClient.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event) -> window.setScene(singleGame15));
 
             exitButton.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event -> System.exit(0)));
@@ -162,18 +276,28 @@ public class Main extends Application {
         launch(args);
     }
 
-    private void createSmallMap() {
+    private void createSmallMap(String mode, String role) {
+
+        if (mode.equals("multi")) {
+            if (role.equals("server")) {
+                serverThread.start();
+            }
+            if(role.equals("client")) {
+                clientThread.start();
+            }
+        }
+
         StackPane tilesPane = new StackPane();
         tilesPane.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         Pane base = new Pane();
         base.setPrefSize(1200, 750);
 
-        Buttons resetBtn = new Buttons(200, 60);
+        Button resetBtn = new Button(200, 60);
         menuBtnCreator(resetBtn, "reset", 875, 530);
         resetBtn.changeFontSize(32);
 
-        Buttons backToMenuBtn = new Buttons(200, 60);
+        Button backToMenuBtn = new Button(200, 60);
         menuBtnCreator(backToMenuBtn, "back", 875, 630);
         backToMenuBtn.changeFontSize(32);
 
@@ -211,18 +335,28 @@ public class Main extends Application {
         singleGame3 = new Scene(tilesPane);
     }
 
-    private void createMedMap() {
+    private void createMedMap(String mode, String role) {
+
+        if (mode.equals("multi")) {
+            if (role.equals("server")) {
+                serverThread.start();
+            }
+            if(role.equals("client")) {
+                clientThread.start();
+            }
+        }
+
         StackPane midMapStackPane = new StackPane();
         midMapStackPane.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         Pane midMapPane = new Pane();
         midMapPane.setPrefSize(1200, 750);
 
-        Buttons resetBtn = new Buttons(200, 60);
+        Button resetBtn = new Button(200, 60);
         menuBtnCreator(resetBtn, "reset", 875, 530);
         resetBtn.changeFontSize(32);
 
-        Buttons backToMenuBtn = new Buttons(200, 60);
+        Button backToMenuBtn = new Button(200, 60);
         menuBtnCreator(backToMenuBtn, "back", 875, 630);
         backToMenuBtn.changeFontSize(32);
 
@@ -263,16 +397,26 @@ public class Main extends Application {
         singleGame10 = new Scene(midMapStackPane);
     }
 
-    private void createLargeMap() {
+    private void createLargeMap(String mode, String role) {
+
+        if (mode.equals("multi")) {
+            if (role.equals("server")) {
+                serverThread.start();
+            }
+            if(role.equals("client")) {
+                clientThread.start();
+            }
+        }
+
         Pane largeMapPane = new Pane();
         StackPane largeMapStackPane = new StackPane();
         largeMapStackPane.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        Buttons resetBtn = new Buttons(200, 60);
+        Button resetBtn = new Button(200, 60);
         menuBtnCreator(resetBtn, "reset", 875, 530);
         resetBtn.changeFontSize(32);
 
-        Buttons backToMenuBtn = new Buttons(200, 60);
+        Button backToMenuBtn = new Button(200, 60);
         menuBtnCreator(backToMenuBtn, "back", 875, 630);
         backToMenuBtn.changeFontSize(32);
 

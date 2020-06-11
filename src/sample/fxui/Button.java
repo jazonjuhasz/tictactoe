@@ -9,14 +9,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class Buttons extends StackPane {
+public class Button extends StackPane {
     public Text text = new Text();
     Rectangle border;
     int xSize;
     int ySize;
     private Color fillColorOnMouse = Color.WHITESMOKE.brighter();
 
-    public Parent createButton(Buttons button) {
+    public Parent createButton(Button button) {
         Pane root = new Pane();
         root.setPrefSize(xSize, ySize);
 
@@ -25,7 +25,7 @@ public class Buttons extends StackPane {
         return root;
     }
 
-    public Buttons(int xSize, int ySize) {
+    public Button(int xSize, int ySize) {
         this.xSize = xSize;
         this.ySize = ySize;
         border = new Rectangle(xSize, ySize);
