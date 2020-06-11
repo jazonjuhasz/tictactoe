@@ -10,9 +10,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
-
-public class Tile extends StackPane {
+public class Logic extends StackPane {
 
     static boolean isEnded = false;
     static boolean hasWonX = false;
@@ -25,7 +23,7 @@ public class Tile extends StackPane {
     public static String[][] board3 = new String[3][3];
     public static String[][] board10 = new String[10][10];
     public static String[][] board15 = new String[15][15];
-    public static Tile[][] tilesArray;
+    public static Logic[][] tilesArray;
 
     public static int tilesCount;
     int i;
@@ -42,7 +40,7 @@ public class Tile extends StackPane {
     static Button winnerText;
 
     public static Parent createContent(int tilesCount) {
-        tilesArray = new Tile[tilesCount][tilesCount];
+        tilesArray = new Logic[tilesCount][tilesCount];
         movesCount = 0;
         double boardSize = 750.0 / tilesCount;
 
@@ -76,7 +74,7 @@ public class Tile extends StackPane {
 
         for (int i = 0; i < tilesCount; i++) {
             for (int j = 0; j < tilesCount; j++) {
-                Tile tile = new Tile(tilesCount);
+                Logic tile = new Logic(tilesCount);
                 tile.setTranslateX(j * boardSize);
                 tile.setTranslateY(i * boardSize);
                 root.getChildren().add(tile);
@@ -88,7 +86,7 @@ public class Tile extends StackPane {
         return root;
     }
 
-    public Tile(int tilesCount) {
+    public Logic(int tilesCount) {
         eraseBoard(board3);
         eraseBoard(board10);
         eraseBoard(board15);
@@ -314,13 +312,14 @@ public class Tile extends StackPane {
             currentPlayerText.setText("");
             winnerText.setText("oh c'mon");
         }
-        if(isEnded && isMultiplayer) {
+        if (isEnded && isMultiplayer) {
             if (!isServer && hasWonX) {
                 winnerText.setText("better luck next time");
             }
             if (isServer && hasWonO) {
                 winnerText.setText("better luck next time");
             }
+            winnerDisplay.setText("");
         }
     }
 
@@ -339,6 +338,34 @@ public class Tile extends StackPane {
                                 this.j + " " +
                                 currentPlayerSign);
             }
+            isMyTurn = false;
+        }
+
+    }
+
+    public static void multiReset() {
+        for (int i = 0; i < tilesArray.length; i++) {
+            for (int j = 0; j < tilesArray.length; j++) {
+                tilesArray[i][j].text.setText("");
+                tilesArray[i][j].writeAble = true;
+
+            }
+        }
+        isEnded = false;
+        hasWonX = false;
+        hasWonO = false;
+        winnerDisplay.setText("");
+        winnerText.setText("");
+        currentPlayerText.setText("next:");
+        nextPlayerDisplay.setText("X");
+        eraseBoard(board3);
+        eraseBoard(board10);
+        eraseBoard(board15);
+        movesCount = 0;
+        if(isServer) {
+            isMyTurn = true;
+        }
+        if (!isServer) {
             isMyTurn = false;
         }
 

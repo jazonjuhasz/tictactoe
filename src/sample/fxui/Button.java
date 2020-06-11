@@ -67,7 +67,7 @@ public class Button extends StackPane {
     }
 
     public void setWinnerText() {
-        if(Tile.hasWonX) {
+        if(Logic.hasWonX) {
             this.text.setText("X");
         } else {
             this.text.setText("O");

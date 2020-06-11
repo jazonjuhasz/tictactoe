@@ -33,8 +33,8 @@ public class Main extends Application {
 
     Thread serverThread = new Thread() {
         public void run() {
-            Tile.isMultiplayer = true;
-            Tile.isServer = true;
+            Logic.isMultiplayer = true;
+            Logic.isServer = true;
             server = new Server();
             try {
                 server.start(8080);
@@ -47,9 +47,9 @@ public class Main extends Application {
 
     Thread clientThread = new Thread() {
         public void run() {
-            Tile.isMultiplayer = true;
-            Tile.isServer = false;
-            Tile.isMyTurn = false;
+            Logic.isMultiplayer = true;
+            Logic.isServer = false;
+            Logic.isMyTurn = false;
             client = new Client();
             try {
                 client.startConnection("localhost", 8080);
@@ -282,7 +282,7 @@ public class Main extends Application {
             if (role.equals("server")) {
                 serverThread.start();
             }
-            if(role.equals("client")) {
+            if (role.equals("client")) {
                 clientThread.start();
             }
         }
@@ -303,32 +303,65 @@ public class Main extends Application {
 
         resetBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 (event) -> {
-                    base.getChildren().clear();
-                    base.getChildren().addAll(
-                            Tile.createContent(smallMapSize),
-                            resetBtn,
-                            backToMenuBtn
-                    );
-                    Tile.eraseBoard(Tile.board3);
-                    Tile.nextPlayerDisplay.setText("X");
-                    System.gc();
+                    if (!Logic.isMultiplayer) {
+                        base.getChildren().clear();
+                        base.getChildren().addAll(
+                                Logic.createContent(smallMapSize),
+                                resetBtn,
+                                backToMenuBtn
+                        );
+                        Logic.eraseBoard(Logic.board3);
+                        Logic.nextPlayerDisplay.setText("X");
+                        System.gc();
+                    }
+                    if (Logic.isMultiplayer) {
+                        if(Logic.isServer) {
+                            server.sendMessage("if you can hear me, please reset your game area");
+                            Logic.multiReset();
+                        }
+                        if(!Logic.isServer) {
+                            client.sendMessage("if you can hear me, please reset your game area");
+                            Logic.multiReset();
+                        }
+                    }
                 });
 
         backToMenuBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 (event) -> {
+                    if (!Logic.isMultiplayer) {
+                        base.getChildren().clear();
+                        base.getChildren().addAll(
+                                Logic.createContent(smallMapSize),
+                                resetBtn,
+                                backToMenuBtn
+                        );
+                        Logic.eraseBoard(Logic.board3);
+                        Logic.nextPlayerDisplay.setText("X");
+                        System.gc();
+                    }
+                    if (Logic.isMultiplayer) {
+                        if(Logic.isServer) {
+                            try {
+                                server.sendMessage("if you can hear me, please reset your game area");
+                            } catch (NullPointerException e) {
+                                window.setScene(menuScene);
+                            }
+                            Logic.multiReset();
+                        }
+                        if(!Logic.isServer) {
+                            try {
+                                client.sendMessage("if you can hear me, please reset your game area");
+                            } catch (NullPointerException e) {
+                                window.setScene(menuScene);
+                            }
+                            Logic.multiReset();
+                        }
+                    }
                     window.setScene(menuScene);
-                    base.getChildren().clear();
-                    base.getChildren().addAll(
-                            Tile.createContent(smallMapSize),
-                            resetBtn,
-                            backToMenuBtn
-                    );
-                    Tile.eraseBoard(Tile.board3);
-                    System.gc();
                 });
 
 
-        base.getChildren().addAll(Tile.createContent(smallMapSize), backToMenuBtn, resetBtn);
+        base.getChildren().addAll(Logic.createContent(smallMapSize), backToMenuBtn, resetBtn);
 
         tilesPane.getChildren().add(base);
 
@@ -341,7 +374,7 @@ public class Main extends Application {
             if (role.equals("server")) {
                 serverThread.start();
             }
-            if(role.equals("client")) {
+            if (role.equals("client")) {
                 clientThread.start();
             }
         }
@@ -362,32 +395,65 @@ public class Main extends Application {
 
         resetBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 (event) -> {
-                    midMapPane.getChildren().clear();
-                    midMapPane.getChildren().addAll(
-                            Tile.createContent(medMapSize),
-                            resetBtn,
-                            backToMenuBtn
-                    );
-                    Tile.eraseBoard(Tile.board10);
-                    Tile.nextPlayerDisplay.setText("X");
-                    System.gc();
+                    if (!Logic.isMultiplayer) {
+                        midMapPane.getChildren().clear();
+                        midMapPane.getChildren().addAll(
+                                Logic.createContent(medMapSize),
+                                resetBtn,
+                                backToMenuBtn
+                        );
+                        Logic.eraseBoard(Logic.board10);
+                        Logic.nextPlayerDisplay.setText("X");
+                        System.gc();
+                    }
+                    if (Logic.isMultiplayer) {
+                        if(Logic.isServer) {
+                            server.sendMessage("if you can hear me, please reset your game area");
+                            Logic.multiReset();
+                        }
+                        if(!Logic.isServer) {
+                            client.sendMessage("if you can hear me, please reset your game area");
+                            Logic.multiReset();
+                        }
+                    }
                 });
 
         backToMenuBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 (event) -> {
+                    if (!Logic.isMultiplayer) {
+                        midMapPane.getChildren().clear();
+                        midMapPane.getChildren().addAll(
+                                Logic.createContent(medMapSize),
+                                resetBtn,
+                                backToMenuBtn
+                        );
+                        Logic.eraseBoard(Logic.board10);
+                        Logic.nextPlayerDisplay.setText("X");
+                        System.gc();
+                    }
+                    if (Logic.isMultiplayer) {
+                        if(Logic.isServer) {
+                            try {
+                                server.sendMessage("if you can hear me, please reset your game area");
+                            } catch (NullPointerException e) {
+                                window.setScene(menuScene);
+                            }
+                            Logic.multiReset();
+                        }
+                        if(!Logic.isServer) {
+                            try {
+                                client.sendMessage("if you can hear me, please reset your game area");
+                            } catch (NullPointerException e) {
+                                window.setScene(menuScene);
+                            }
+                            Logic.multiReset();
+                        }
+                    }
                     window.setScene(menuScene);
-                    midMapPane.getChildren().clear();
-                    midMapPane.getChildren().addAll(
-                            Tile.createContent(medMapSize),
-                            resetBtn,
-                            backToMenuBtn
-                    );
-                    Tile.eraseBoard(Tile.board10);
-                    System.gc();
                 });
 
         midMapPane.getChildren().addAll(
-                Tile.createContent(medMapSize),
+                Logic.createContent(medMapSize),
                 resetBtn,
                 backToMenuBtn
         );
@@ -403,7 +469,7 @@ public class Main extends Application {
             if (role.equals("server")) {
                 serverThread.start();
             }
-            if(role.equals("client")) {
+            if (role.equals("client")) {
                 clientThread.start();
             }
         }
@@ -422,34 +488,67 @@ public class Main extends Application {
 
         resetBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 (event) -> {
-                    largeMapPane.getChildren().clear();
-                    largeMapPane.getChildren().addAll(
-                            Tile.createContent(largeMapSize),
-                            resetBtn,
-                            backToMenuBtn
-                    );
-                    Tile.eraseBoard(Tile.board15);
-                    Tile.nextPlayerDisplay.setText("X");
-                    System.gc();
+                    if (!Logic.isMultiplayer) {
+                        largeMapPane.getChildren().clear();
+                        largeMapPane.getChildren().addAll(
+                                Logic.createContent(largeMapSize),
+                                resetBtn,
+                                backToMenuBtn
+                        );
+                        Logic.eraseBoard(Logic.board15);
+                        Logic.nextPlayerDisplay.setText("X");
+                        System.gc();
+                    }
+                    if (Logic.isMultiplayer) {
+                        if(Logic.isServer) {
+                            server.sendMessage("if you can hear me, please reset your game area");
+                            Logic.multiReset();
+                        }
+                        if(!Logic.isServer) {
+                            client.sendMessage("if you can hear me, please reset your game area");
+                            Logic.multiReset();
+                        }
+                    }
                 });
 
         backToMenuBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 (event) -> {
+                    if (!Logic.isMultiplayer) {
+                        largeMapPane.getChildren().clear();
+                        largeMapPane.getChildren().addAll(
+                                Logic.createContent(largeMapSize),
+                                resetBtn,
+                                backToMenuBtn
+                        );
+                        Logic.eraseBoard(Logic.board15);
+                        Logic.nextPlayerDisplay.setText("X");
+                        System.gc();
+                    }
+                    if (Logic.isMultiplayer) {
+                        if(Logic.isServer) {
+                            try {
+                                server.sendMessage("if you can hear me, please reset your game area");
+                            } catch (NullPointerException e) {
+                                window.setScene(menuScene);
+                            }
+                            Logic.multiReset();
+                        }
+                        if(!Logic.isServer) {
+                            try {
+                                client.sendMessage("if you can hear me, please reset your game area");
+                            } catch (NullPointerException e) {
+                                window.setScene(menuScene);
+                            }
+                            Logic.multiReset();
+                        }
+                    }
                     window.setScene(menuScene);
-                    largeMapPane.getChildren().clear();
-                    largeMapPane.getChildren().addAll(
-                            Tile.createContent(largeMapSize),
-                            resetBtn,
-                            backToMenuBtn
-                    );
-                    Tile.eraseBoard(Tile.board15);
-                    System.gc();
                 });
 
         largeMapPane.setPrefSize(1200, 750);
 
         largeMapPane.getChildren().addAll(
-                Tile.createContent(largeMapSize),
+                Logic.createContent(largeMapSize),
                 resetBtn,
                 backToMenuBtn
         );

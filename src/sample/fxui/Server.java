@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
 
 public class Server {
     private ServerSocket serverSocket;
@@ -27,31 +26,33 @@ public class Server {
         while (true) {
             String message = in.readLine();
             System.out.println("Server catched a mail " + message);
-            if (message != null) {
+            if (message.length() < 8) {
                 String[] msgArray = message.split(" ");
 
                 int i = Integer.parseInt(msgArray[0]);
                 int j = Integer.parseInt(msgArray[1]);
-                Tile.tilesArray[i][j].writeAble = false;
-                Tile.changePlayer();
-                Tile.movesCount++;
-                Tile.nextPlayerDisplay.setText(Tile.currentPlayerSign);
-                Tile.tilesArray[i][j].text.setText(msgArray[2]);
-                switch (Tile.tilesCount) {
+                Logic.tilesArray[i][j].writeAble = false;
+                Logic.changePlayer();
+                Logic.movesCount++;
+                Logic.nextPlayerDisplay.setText(Logic.currentPlayerSign);
+                Logic.tilesArray[i][j].text.setText(msgArray[2]);
+                switch (Logic.tilesCount) {
                     case 3:
-                        Tile.board3[i][j] = msgArray[2];
+                        Logic.board3[i][j] = msgArray[2];
                         break;
                     case 10:
-                        Tile.board10[i][j] = msgArray[2];
+                        Logic.board10[i][j] = msgArray[2];
                         break;
                     case 15:
-                        Tile.board15[i][j] = msgArray[2];
+                        Logic.board15[i][j] = msgArray[2];
                         break;
                 }
-                Tile.checkWinners();
-                Tile.isMyTurn = true;
+                Logic.checkWinners();
+                Logic.isMyTurn = true;
             }
-
+            if (message.equals("if you can hear me, please reset your game area")) {
+                Logic.multiReset();
+            }
         }
     }
 
@@ -59,8 +60,6 @@ public class Server {
     public void sendMessage(String msg) {
         out.println(msg);
         System.out.println("Server sent a msg " + msg);
-        /*String response = in.readLine();
-        return response;*/
     }
 
     public void stop() throws IOException {
