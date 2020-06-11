@@ -22,13 +22,11 @@ public class Server {
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-        System.out.println("START");
         while (true) {
             String message = in.readLine();
             System.out.println("Server catched a mail " + message);
             if (message.length() < 8) {
                 String[] msgArray = message.split(" ");
-
                 int i = Integer.parseInt(msgArray[0]);
                 int j = Integer.parseInt(msgArray[1]);
                 Logic.tilesArray[i][j].writeAble = false;
@@ -47,6 +45,7 @@ public class Server {
                         Logic.board15[i][j] = msgArray[2];
                         break;
                 }
+                Logic.winnerText.setText("Your turn");
                 Logic.checkWinners();
                 Logic.isMyTurn = true;
             }
@@ -55,7 +54,6 @@ public class Server {
             }
         }
     }
-
 
     public void sendMessage(String msg) {
         out.println(msg);

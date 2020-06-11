@@ -16,8 +16,8 @@ public class Logic extends StackPane {
     static boolean hasWonX = false;
     static boolean hasWonO = false;
 
-    static boolean isServer;
-    static boolean isMultiplayer;
+    static boolean isServer = false;
+    static boolean isMultiplayer = false;
     static boolean isMyTurn = true;
 
     public static String[][] board3 = new String[3][3];
@@ -87,6 +87,14 @@ public class Logic extends StackPane {
     }
 
     public Logic(int tilesCount) {
+        if(isMultiplayer) {
+            if(isServer) {
+                winnerText.setText("Your turn");
+            }
+            if (!isServer) {
+                winnerText.setText("opponent's turn");
+            }
+        }
         eraseBoard(board3);
         eraseBoard(board10);
         eraseBoard(board15);
@@ -339,8 +347,8 @@ public class Logic extends StackPane {
                                 currentPlayerSign);
             }
             isMyTurn = false;
+            Logic.winnerText.setText("opponent's turn");
         }
-
     }
 
     public static void multiReset() {
@@ -364,10 +372,11 @@ public class Logic extends StackPane {
         movesCount = 0;
         if(isServer) {
             isMyTurn = true;
+            Logic.winnerText.setText("Your turn");
         }
         if (!isServer) {
             isMyTurn = false;
+            Logic.winnerText.setText("opponent's turn");
         }
-
     }
 }

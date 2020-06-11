@@ -59,7 +59,6 @@ public class Main extends Application {
         }
     };
 
-
     public static void menuBtnCreator(Button name, String text, int widthOnPane, int heightOnPane) {
         name.createButton(name);
         name.text.setText(text);
@@ -172,8 +171,6 @@ public class Main extends Application {
                     ));
 
             // lan (click) for each
-
-
             multiPlayerBtn.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event) -> menuBase.getChildren().removeAll(
                             singleplayerBtn,

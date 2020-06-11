@@ -20,9 +20,7 @@ public class Client {
             String message = in.readLine();
             System.out.println("Client catched a mail "+ message);
             if (message.length() < 8) {
-
                 String[] msgArray = message.split(" ");
-
                 int i = Integer.parseInt(msgArray[0]);
                 int j = Integer.parseInt(msgArray[1]);
                 Logic.tilesArray[i][j].writeAble = false;
@@ -41,6 +39,7 @@ public class Client {
                         Logic.board15[i][j] = msgArray[2];
                         break;
                 }
+                Logic.winnerText.setText("Your turn");
                 Logic.checkWinners();
                 Logic.isMyTurn = true;
             }
@@ -53,8 +52,6 @@ public class Client {
     public void sendMessage(String msg) {
         out.println(msg);
         System.out.println("Client sent a msg " + msg);
-        /*String response = in.readLine();
-        return response;*/
     }
 
     public void stop() throws IOException {

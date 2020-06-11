@@ -19,9 +19,7 @@ public class Button extends StackPane {
     public Parent createButton(Button button) {
         Pane root = new Pane();
         root.setPrefSize(xSize, ySize);
-
         root.getChildren().add(button);
-
         return root;
     }
 
@@ -33,14 +31,11 @@ public class Button extends StackPane {
         border.setStyle("-fx-border-width: 5");
         border.setStroke(Color.BLACK);
         text.setFont(Font.font(36));
-
         setAlignment(Pos.CENTER);
         getChildren().addAll(border, text);
-
         setOnMouseEntered(event -> {
             border.setFill(fillColorOnMouse);
         });
-
         setOnMouseExited(event -> {
             border.setFill(Color.WHITESMOKE);
         });
@@ -48,10 +43,6 @@ public class Button extends StackPane {
 
     public void changeBorderColor(Rectangle rectangle, Color color) {
         rectangle.setStroke(color);
-    }
-
-    public void changeFillColor(Rectangle rectangle, Color color) {
-        rectangle.setFill(color);
     }
 
     public void changeOnMouseColor(Color color) {
